@@ -1,5 +1,5 @@
-kukoin_token_list = ["BTC-USDT", "ETH-USDT", "SOL-USDT", "BNB-USDT", "TON-USDT", "UNI-USDT", "LTC-USDT", "APT-USDT"]
-binance_token_list = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "TONUSDT", "UNIUSDT", "LTCUSDT", "APTUSDT"]
+kukoin_token_list = ["BTC-USDT", "ETH-USDT", "SOL-USDT", "BNB-USDT", "TON-USDT", "UNI-USDT", "LTC-USDT", "APT-USDT", "GGGG"]
+binance_token_list = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "TONUSDT", "UNIUSDT", "LTCUSDT", "APTUSDT", "FFFF"]
 kukoin_data = {}
 binance_data = {}
 
@@ -18,11 +18,11 @@ for item in kukoin_token_list:
                 kukoin_data[item] = price
             # else:
             #     print(f'Нет такой пары на бирже - ', symbol)
-    elif response_btc.status_code == 429:
+    elif response.status_code == 429:
             print("Kucoin API rate limit")
-    elif response_btc.status_code == 400:
-            print("Bad request")
-    elif response_btc.status_code == 404:
+    elif response.status_code == 400:
+            print("Bad request Kucoin", {item})
+    elif response.status_code == 404:
             print("URL Not Found")
 
 # print(kukoin_data)
@@ -38,11 +38,11 @@ for item in binance_token_list:
             request = response.json()
             price = float(request.get("price"))
             binance_data[item] = price
-    elif response_btc.status_code == 429:
+    elif response.status_code == 429:
         print("Binance API rate limit")
-    elif response_btc.status_code == 400:
-        print("Bad request")
-    elif response_btc.status_code == 404:
+    elif response.status_code == 400:
+        print("Bad request Binance", {item})
+    elif response.status_code == 404:
         print("URL Not Found")
 
 # print(binance_data)
