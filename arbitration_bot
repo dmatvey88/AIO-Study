@@ -70,21 +70,12 @@ def profit_calculator():
         profit = b - a
         return profit
 
-# def pair_display():
-#     for i in range(len(binance_token_list)):
-#        pair = binance_token_list[i]
-#     return pair
-#
-# pair = pair_display()
-# print(pair)
-
 for i in range(len(kukoin_price)):
     a = kukoin_price[i]
     b = binance_price[i]
     spread = spread_calculator()
     profit = profit_calculator()
-    # pair = pair_display()
-    print(f'---------------------------')
+    print(f'-------{binance_token_list[i]}-------')
     print(f'Kucoin:', format(a, '.2f'),'$')
     print(f'Binance:', format(b, '.2f'),'$')
     print(f'Профит:', format(profit, '.3f'), '$')
