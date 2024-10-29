@@ -1,12 +1,15 @@
-kukoin_token_list = []
+
+import json
+
+kucoin_token_list = []
 binance_token_list = []
 
-kukoin_data = {}
+kucoin_data = {}
 binance_data = {}
 
 try:
     with open('kucoin_token_list.txt', 'r', encoding="utf-8") as file:
-        kukoin_token_list = file.read().splitlines()
+        kucoin_token_list = file.read().splitlines()
 except:
     print("Файл по указанному пути не найден")
 
@@ -17,17 +20,17 @@ except:
     print("Файл по указанному пути не найден")
 
 # print(binance_token_list)
-# print(kukoin_token_list)
+# print(kucoin_token_list)
 
-# kukoin_token_list = ["BTC-USDT", "ETH-USDT", "SOL-USDT", "BNB-USDT", "TON-USDT", "UNI-USDT", "LTC-USDT", "APT-USDT", "BONK"]
+# kucoin_token_list = ["BTC-USDT", "ETH-USDT", "SOL-USDT", "BNB-USDT", "TON-USDT", "UNI-USDT", "LTC-USDT", "APT-USDT", "BONK"]
 # binance_token_list = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "TONUSDT", "UNIUSDT", "LTCUSDT", "APTUSDT", "BONK"]
-kukoin_data = {}
+kucoin_data = {}
 binance_data = {}
 
 import requests
 
 url = f"https://api.kucoin.com/api/v1/market/allTickers"
-for item in kukoin_token_list:
+for item in kucoin_token_list:
     response = requests.get(url)
     if response.status_code == 200:
         request = response.json()
@@ -36,17 +39,24 @@ for item in kukoin_token_list:
             price = token["last"]
             if symbol == item:
                 price = float(price)
-                kukoin_data[item] = price
+                kucoin_data[item] = price
             # else:
             #     print(f'Нет такой пары на бирже - ', symbol)
     elif response.status_code == 429:
             print("Kucoin API rate limit")
     elif response.status_code == 400:
-            print("Bad request Kucoin", {item})
+            print("!! Bad request Kucoin", {item}, '!!')
     elif response.status_code == 404:
             print("URL Not Found")
 
-# print(kukoin_data)
+
+with open("kucoin_data.json", "w", encoding="utf-8") as file:
+  json.dump(kucoin_data, file, ensure_ascii=False, indent=4)
+
+with open("kucoin_data.json", "r", encoding="utf-8") as file:
+  kucoin_data = json.load(file)
+
+# print(kucoin_data)
 
 import requests
 
@@ -62,15 +72,21 @@ for item in binance_token_list:
     elif response.status_code == 429:
         print("Binance API rate limit")
     elif response.status_code == 400:
-        print("Bad request Binance", {item})
+        print("!! Bad request Binance", {item}, '!!')
     elif response.status_code == 404:
         print("URL Not Found")
 
+with open("binance_data.json", "w", encoding="utf-8") as file:
+  json.dump(binance_data, file, ensure_ascii=False, indent=4)
+
+with open("binance_data.json", "r", encoding="utf-8") as file:
+  binance_data = json.load(file)
+
 # print(binance_data)
 
-kukoin_price = list(kukoin_data.values())
+kucoin_price = list(kucoin_data.values())
 binance_price = list(binance_data.values())
-# print(kukoin_price)
+# print(kucoin_price)
 # print(binance_price)
 
 def spread_calculator():
@@ -78,7 +94,7 @@ def spread_calculator():
         spread = ((a - b)/a)*100
         return spread
     elif b > a and ((b - a)/b) > 0.00001:
-        spread = ((b - a)/b)*100
+        spread = int(((b - a)/b)*100)
         return spread
     else:
         print('Спред меньше 0.001%')
@@ -91,14 +107,13 @@ def profit_calculator():
         profit = int(b - a)
         return profit
 
-for i in range(len(kukoin_price)):
-    a = kukoin_price[i]
+for i in range(len(kucoin_price)):
+    a = kucoin_price[i]
     b = binance_price[i]
     spread = spread_calculator()
     profit = profit_calculator()
     print(f'-------{binance_token_list[i]}-------')
     print(f'Kucoin:', format(a, '.2f'),'$')
     print(f'Binance:', format(b, '.2f'),'$')
-    print(f'Профит:', format(profit, '.3f'), '$')
+    print(f'Профит:', format(profit, '.2f'), '$')
     print(f'Спред:', '{:.3f}'.format(spread),'%')
-
