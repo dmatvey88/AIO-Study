@@ -1,5 +1,26 @@
-kukoin_token_list = ["BTC-USDT", "ETH-USDT", "SOL-USDT", "BNB-USDT", "TON-USDT", "UNI-USDT", "LTC-USDT", "APT-USDT", "GGGG"]
-binance_token_list = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "TONUSDT", "UNIUSDT", "LTCUSDT", "APTUSDT", "FFFF"]
+kukoin_token_list = []
+binance_token_list = []
+
+kukoin_data = {}
+binance_data = {}
+
+try:
+    with open('kucoin_token_list.txt', 'r', encoding="utf-8") as file:
+        kukoin_token_list = file.read().splitlines()
+except:
+    print("Файл по указанному пути не найден")
+
+try:
+    with open('binance_token_list.txt', 'r', encoding="utf-8") as file:
+        binance_token_list = file.read().splitlines()
+except:
+    print("Файл по указанному пути не найден")
+
+# print(binance_token_list)
+# print(kukoin_token_list)
+
+# kukoin_token_list = ["BTC-USDT", "ETH-USDT", "SOL-USDT", "BNB-USDT", "TON-USDT", "UNI-USDT", "LTC-USDT", "APT-USDT", "BONK"]
+# binance_token_list = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "TONUSDT", "UNIUSDT", "LTCUSDT", "APTUSDT", "BONK"]
 kukoin_data = {}
 binance_data = {}
 
@@ -67,7 +88,7 @@ def profit_calculator():
         profit = a - b
         return profit
     elif b > a:
-        profit = b - a
+        profit = int(b - a)
         return profit
 
 for i in range(len(kukoin_price)):
@@ -80,3 +101,4 @@ for i in range(len(kukoin_price)):
     print(f'Binance:', format(b, '.2f'),'$')
     print(f'Профит:', format(profit, '.3f'), '$')
     print(f'Спред:', '{:.3f}'.format(spread),'%')
+
